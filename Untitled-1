@@ -1,0 +1,8 @@
+import csv
+
+movies = []
+with open("title.basics.tsv") as tsvfile:
+    tsvreader = csv.reader(tsvfile, delimiter="\t")
+    for line in tsvreader:
+        if line[1] == 'movie' and line[5].parseInt() >= 2000 :
+            movies.append(line)
