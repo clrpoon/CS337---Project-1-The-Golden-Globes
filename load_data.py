@@ -1,7 +1,9 @@
+# python library imports
 import json
 import time
 
-ALL_TWEETS = {}
+# local files imports
+from gg_api import ALL_TWEETS
 
 # path_to_dataset = "../gg-datasets/"
 
@@ -77,12 +79,12 @@ def load_all(path_to_dataset, show_performance = False):
     else:
         print('loading gg2013.json')
         get_tweets(2013, path_to_dataset)
-        print('gg2013 done loading', convert(end_time))
+        print('gg2013 done loading')
         
         print('loading gg2015.json')
         get_tweets(2015, path_to_dataset)
-        print('gg2015 done loading', convert(end_time))
+        print('gg2015 done loading')
 
         print('loading gg2020.json')
         get_tweets(2020, path_to_dataset)
-        print('gg2020 done loading', convert(end_time))
+        print('gg2020 done loading')

@@ -1,5 +1,10 @@
 import string
 import re
+from nltk.stem import WordNetLemmatizer 
+from nltk.tokenize import TweetTokenizer
+
+TKNZ = TweetTokenizer()
+LEM = WordNetLemmatizer() 
 
 def filter_tweets(tweets_list, expr):
     output = []
@@ -23,3 +28,20 @@ def clean_tweet(tweet):
     cleaned_tweet = re.sub(r'[^\w\s]', '', cleaned_tweet)
 
     return cleaned_tweet
+
+def tokenize_tweet(tweet):
+    tokens = TKNZ.tokenize(tweet)
+    
+    return tokens
+
+def lemmatize_tweet(tweet):
+    tokens = tweet
+    if type(tweet) == str:
+        tokens = tokenize_tweet(tweet)
+    
+    lem_tokens = []
+    for token in tokens:
+        lem_tokens.append(LEM.lemmatize(token))
+    
+    return lem_tokens
+
