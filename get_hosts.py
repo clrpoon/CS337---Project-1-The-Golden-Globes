@@ -37,29 +37,9 @@ def _get_hosts(year, data):
         winner2 = max(host_name_count.items(), key=operator.itemgetter(1))[0]
 
         return [winner1, winner2]
-    else:
-        return [winner1]
     
-    winner1_count = host_name_count[winner1]
+    return [winner1]
     
-    
-    del host_name_count[winner2]
-    winner3 = max(host_name_count.items(), key=operator.itemgetter(1))[0]
-    winner3_count = host_name_count[winner3]
-    del host_name_count[winner3]
-    winner4 = max(host_name_count.items(), key=operator.itemgetter(1))[0]
-    winner4_count = host_name_count[winner4]
-
-    print(winner1)
-    print(winner1_count)
-    print(winner2)
-    print(winner2_count)
-    print(winner3)
-    print(winner3_count)
-    print(winner4)
-    print(winner4_count)
-
-    return []
 
 def get_names(text):
     global nlp
