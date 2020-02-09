@@ -5,8 +5,6 @@ import time
 # local files imports
 from gg_api import ALL_TWEETS
 
-# path_to_dataset = "../gg-datasets/"
-
 def convert(seconds): 
     seconds = seconds % (24 * 3600) 
     hour = seconds // 3600
@@ -18,6 +16,8 @@ def convert(seconds):
 
 
 def get_tweets(year, path_to_dataset):
+    global ALL_TWEETS
+
     if year in ALL_TWEETS:
         return ALL_TWEETS[year]
     else:

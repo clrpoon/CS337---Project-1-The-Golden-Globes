@@ -1,5 +1,7 @@
 '''Version 0.35'''
 # python library imports
+import time
+import nltk
 
 # local file imports
 from util import *
@@ -12,11 +14,9 @@ from get_nominees import _get_nominees
 from get_winner import _get_winners
 from get_presenters import _get_presenters
 
-
-
 OFFICIAL_AWARDS_1315 = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
 OFFICIAL_AWARDS_1819 = ['best motion picture - drama', 'best motion picture - musical or comedy', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best performance by an actress in a motion picture - musical or comedy', 'best performance by an actor in a motion picture - musical or comedy', 'best performance by an actress in a supporting role in any motion picture', 'best performance by an actor in a supporting role in any motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best motion picture - animated', 'best motion picture - foreign language', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best television series - musical or comedy', 'best television limited series or motion picture made for television', 'best performance by an actress in a limited series or a motion picture made for television', 'best performance by an actor in a limited series or a motion picture made for television', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best performance by an actress in a television series - musical or comedy', 'best performance by an actor in a television series - musical or comedy', 'best performance by an actress in a supporting role in a series, limited series or motion picture made for television', 'best performance by an actor in a supporting role in a series, limited series or motion picture made for television', 'cecil b. demille award']
-PATH_TO_DATASET = ""
+PATH_TO_DATASET = None
 ALL_TWEETS = {}
 
 def get_hosts(year):
@@ -24,7 +24,19 @@ def get_hosts(year):
     of this function or what it returns.'''
     # Your code here
 
-    # return hosts
+    # check if PATH_TO_DATASET is defined first
+    global PATH_TO_DATASET
+
+    if (PATH_TO_DATASET == None):
+        PATH_TO_DATASET = input("Please enter filepath to Golden Globe Dataset Golden Globes Dataset:\n")
+    
+    data = get_tweets(year, PATH_TO_DATASET)
+
+    print("Retrieving Host(s)...")
+    start_time = time.time()
+    hosts = _get_hosts(year, data)
+    print("Retrieved Hosts in", time.time()-start_time, "seconds")
+    return hosts
 
 def get_awards(year):
     '''Awards is a list of strings. Do NOT change the name
@@ -60,6 +72,8 @@ def pre_ceremony():
     Do NOT change the name of this function or what it returns.'''
     # Your code here
     # load_all(PATH_TO_DATASET)
+    nltk.download('wordnet')
+    nltk.download('stopwords')
     print("Pre-ceremony processing complete.")
     return
 
@@ -70,8 +84,9 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
-    # PATH_TO_DATASET = "../gg-datasets/"
-    PATH_TO_DATASET = input("Please enter filepath to Golden Globe Dataset Golden Globes Dataset:\n")
+    global PATH_TO_DATASET
+    PATH_TO_DATASET = "../gg-datasets/"
+    # PATH_TO_DATASET = input("Please enter filepath to Golden Globe Dataset Golden Globes Dataset:\n")
 
     pre_ceremony()
     year = int(input("Please enter year of Golden Globes Dataset:\n"))
@@ -79,8 +94,9 @@ def main():
     print("Loading Golden Globes dataset from", year)
     data = get_tweets(year, PATH_TO_DATASET)
 
-    print("Getting Host(s) for", year)
-    get_hosts(year)
+    print("Getting Host(s) for", year, "Golden Globes")
+    hosts = get_hosts(year)
+    print(hosts)
 
     
     fin = input("Press enter to exit")
