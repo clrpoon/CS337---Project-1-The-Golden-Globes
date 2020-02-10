@@ -42,7 +42,7 @@ def _get_redcarpet(data, year):
     
     for tweet in tweets_with_dressed:
         tweet_text = tweet['text']
-        if("worst" in tweet_text.lower()) :
+        if("worst" in tweet_text.lower() and "best" not in tweet_text.lower()) :
             tweets_with_worst.append(tweet)
         elif ("best" in tweet_text.lower()) :
             tweets_with_best.append(tweet)
@@ -65,8 +65,8 @@ def _get_redcarpet(data, year):
     max_best_dressed = max(best_dressed_count.items(), key=operator.itemgetter(1))[0]
     best_dressed_count.pop(max_best_dressed, None)
     second_best_dressed = max(best_dressed_count.items(), key=operator.itemgetter(1))[0]
-    best_dressed_count.pop(second_best_dressed, None)
-    third_best_dressed = max(best_dressed_count.items(), key=operator.itemgetter(1))[0]
+#    best_dressed_count.pop(second_best_dressed, None)
+#    third_best_dressed = max(best_dressed_count.items(), key=operator.itemgetter(1))[0]
 
 
     
@@ -82,13 +82,13 @@ def _get_redcarpet(data, year):
             else:
                 worst_dressed_count[name] = 1
     max_worst_dressed = max(worst_dressed_count.items(), key=operator.itemgetter(1))[0]
-#    worst_dressed_count.pop(max_worst_dressed, None)
-#    second_worst_dressed = max(worst_dressed_count.items(), key=operator.itemgetter(1))[0]
+    worst_dressed_count.pop(max_worst_dressed, None)
+    second_worst_dressed = max(worst_dressed_count.items(), key=operator.itemgetter(1))[0]
 #    worst_dressed_count.pop(second_worst_dressed, None)
 #    third_worst_dressed = max(worst_dressed_count.items(), key=operator.itemgetter(1))[0]
 
       
-    return max_best_dressed, second_best_dressed, third_best_dressed, max_worst_dressed
+    return max_best_dressed, second_best_dressed, max_worst_dressed, second_worst_dressed,
 
 
 _get_redcarpet(data, 2013)
