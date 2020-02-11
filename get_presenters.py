@@ -1,2 +1,2 @@
-def _get_presenters(data):
-    return None
+def _get_presenters(data, awards):
+    return {}

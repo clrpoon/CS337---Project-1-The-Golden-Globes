@@ -178,3 +178,12 @@ def filter_award_tweets(data, award):
                 tweets_with_award.append(tweet)
         return tweets_with_award
 
+def filter_tweets_remove(tweets, param):
+    matches =[]
+    for tweet in tweets:
+        found = re.search(param, tweet, flags=re.IGNORECASE)
+        if(not found):
+                 matches.append(tweet)
+
+    return matches
+
