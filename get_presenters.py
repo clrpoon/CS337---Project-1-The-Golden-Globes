@@ -1,3 +1,7 @@
+import spacy
+nlp = spacy.load("en_core_web_sm")
+
+
 def filter_presenter_tweets(data, award):
     tweets_with_presenters = []
     # non important award words        
@@ -12,15 +16,23 @@ def filter_presenter_tweets(data, award):
     for tweet in data: 
         tweet_text = tweet
         if any(pres_keyword in tweet_text.lower() for pres_keyword in present_words):
-#             count = 0 
-#             for k in award_keywords:
-#                 if k in tweet_text.lower():
-#                     count+=1
-#             if count/len(award_keywords) >= 0.5:
-#             print(tweet_text)
-#             print("-------------------------------------------------------------------------------------")
             tweets_with_presenters.append(tweet_text)
     return tweets_with_presenters
+
+def get_name_with_type(text, entity_type):
+        global nlp
+        article = nlp(text)
+        labels = [x.label_ for x in article.ents]
+        [(x.orth_,x.pos_, x.lemma_) for x in [y 
+                                        for y
+                                        in nlp(text) 
+                                        if not y.is_stop and y.pos_ != 'PUNCT']]
+        parts_of_speech = dict([(str(x), x.label_) for x in nlp(text).ents])
+        names = []
+        for (key, value) in parts_of_speech.items() :
+            if(value == entity_type) :
+                names.append(key)
+        return names 
 
 def _get_presenters(data, awards):
     '''Hosts is a list of one or more strings. Do NOT change the name
@@ -31,15 +43,11 @@ def _get_presenters(data, awards):
     for award in awards:
     # Get tweets with keyword award 
         tweets_with_award = filter_presenter_tweets(data, award)
-#         print(tweets_with_award)
-#         tweets_with_award = preprocess_tweets(tweets_with_award)
-#         tweets_with_award = remove_stop_words_from_tweets(tweets_with_hosts, ['http', 'golden', 'gg', '@'])
-        
         presenter_name_count = {}
         for tweet in tweets_with_award: 
             # movies are categorized as WORK_OF_ART
             entity_type = "PERSON"
-            names = get_type_of_name(tweet, entity_type)
+            names = get_name_with_type(tweet, entity_type)
             for name in names :
                 if name.lower() in ["#goldenglobes", "rt @goldenglobes", "cecil b. demille", "goldenglobes", "goldenglobe", "golden", "globes", "golden globes", "golden globe"]:
                     continue
@@ -47,7 +55,6 @@ def _get_presenters(data, awards):
                     presenter_name_count[name] = presenter_name_count[name] + 1
                 else:
                     presenter_name_count[name] = 1
-#         print(award, nominee_name_count)
         two_presenters = [] 
         for i in range(2): 
             try:
@@ -57,6 +64,6 @@ def _get_presenters(data, awards):
             except: 
                 two_presenters.append("")
         presenters[award] = two_presenters
-        print(award,presenters[award])
-        print('-----------------------------------------')
     return presenters 
+
+    

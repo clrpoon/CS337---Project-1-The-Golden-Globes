@@ -104,6 +104,26 @@ def preprocess_tweets(tweets):
 
     return output
 
+def get_name_with_type(text, entity_type):
+    global nlp
+    article = nlp(text)
+    labels = [x.label_ for x in article.ents]
+    [(x.orth_,x.pos_, x.lemma_) for x in [y 
+                                      for y
+                                      in nlp(text) 
+                                      if not y.is_stop and y.pos_ != 'PUNCT']]
+    parts_of_speech = dict([(str(x), x.label_) for x in nlp(text).ents])
+    names = []
+    # print(text)
+    # print('\n')
+    # print("parts of speech:", parts_of_speech)
+    # print('\n')
+    # print('-----------------------------')
+    for (key, value) in parts_of_speech.items() :
+        if(value == entity_type) :
+            names.append(key)
+    return names 
+
 def get_names(text):
     global nlp
     article = nlp(text)
@@ -189,3 +209,5 @@ def filter_tweets_remove(tweets, param):
 
 def convert_human_readable_list(lst):
     return ", ".join(lst) 
+
+    
