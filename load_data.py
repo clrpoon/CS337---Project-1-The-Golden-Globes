@@ -3,7 +3,8 @@ import json
 import time
 
 # local files imports
-from gg_api import ALL_TWEETS
+import gg_api
+
 
 def convert(seconds): 
     seconds = seconds % (24 * 3600) 
@@ -15,8 +16,7 @@ def convert(seconds):
     return "%d:%02d:%02d" % (hour, minutes, seconds)
 
 
-def get_tweets(year, path_to_dataset):
-    global ALL_TWEETS
+def get_tweets(year, path_to_dataset, ALL_TWEETS):
 
     if year in ALL_TWEETS:
         return ALL_TWEETS[year]
@@ -46,13 +46,13 @@ def get_tweets(year, path_to_dataset):
         return []
 
 
-def load_all(path_to_dataset, show_performance = False):
+def load_all(path_to_dataset, ALL_TWEETS, show_performance = False):
     if show_performance:
         init_time = time.time()
         
         start_time = time.time()
         print('loading gg2013.json start time', convert(start_time))
-        get_tweets(2013, path_to_dataset)
+        get_tweets(2013, path_to_dataset, ALL_TWEETS)
         end_time = time.time()
         print('loading gg2013.json end time', convert(end_time))
         elapsed_time = time.time() - start_time
@@ -61,7 +61,7 @@ def load_all(path_to_dataset, show_performance = False):
         
         start_time = time.time()
         print('loading gg2015.json start time', convert(start_time))
-        get_tweets(2015, path_to_dataset)
+        get_tweets(2015, path_to_dataset, ALL_TWEETS)
         end_time = time.time()
         print('loading gg2015.json end time', convert(end_time))
         elapsed_time = time.time() - start_time
@@ -69,7 +69,7 @@ def load_all(path_to_dataset, show_performance = False):
         
         start_time = time.time()
         print('loading gg2020.json start time', convert(start_time))
-        get_tweets(2020, path_to_dataset)
+        get_tweets(2020, path_to_dataset, ALL_TWEETS)
         end_time = time.time()
         print('loading gg2020.json end time', convert(end_time))
         elapsed_time = time.time() - start_time
@@ -78,13 +78,13 @@ def load_all(path_to_dataset, show_performance = False):
         print('total time elapsed', time.time() - init_time)
     else:
         print('loading gg2013.json')
-        get_tweets(2013, path_to_dataset)
+        get_tweets(2013, path_to_dataset, ALL_TWEETS)
         print('gg2013 done loading')
         
         print('loading gg2015.json')
-        get_tweets(2015, path_to_dataset)
+        get_tweets(2015, path_to_dataset, ALL_TWEETS)
         print('gg2015 done loading')
 
         print('loading gg2020.json')
-        get_tweets(2020, path_to_dataset)
+        get_tweets(2020, path_to_dataset, ALL_TWEETS)
         print('gg2020 done loading')

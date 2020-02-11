@@ -1,12 +1,10 @@
 #  python library imports
-import en_core_web_sm
 import tokenize
 import operator
 
 # local file imports
 from util import *
 
-nlp = en_core_web_sm.load()
 
 def _get_hosts(year, data):
     double_host_years = [2013, 2014, 2015, 2019, 2021]
@@ -41,17 +39,3 @@ def _get_hosts(year, data):
     return [winner1]
     
 
-def get_names(text):
-    global nlp
-    article = nlp(text)
-    labels = [x.label_ for x in article.ents]
-    [(x.orth_,x.pos_, x.lemma_) for x in [y 
-                                      for y
-                                      in nlp(text) 
-                                      if not y.is_stop and y.pos_ != 'PUNCT']]
-    parts_of_speech = dict([(str(x), x.label_) for x in nlp(text).ents])
-    names = []
-    for (key, value) in parts_of_speech.items() :
-        if(value == "PERSON") :
-            names.append(key)
-    return names 
