@@ -87,9 +87,12 @@ def _get_awards(data):
     
     awards = []
     for _ in range(27):
-        award = max(award_count.items(), key=operator.itemgetter(1))[0]
+        try:
+            award = max(award_count.items(), key=operator.itemgetter(1))[0]
+            del award_count[award]
+        except:
+            award=""
         awards.append(award)
-        del award_count[award]
     awards.sort()
 
     return awards

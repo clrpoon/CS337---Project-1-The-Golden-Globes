@@ -2,13 +2,13 @@
 import string
 import re
 import nltk
-import en_core_web_sm
+import spacy
 from nltk.stem import WordNetLemmatizer 
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
 
 
-nlp = en_core_web_sm.load()
+nlp = spacy.load("en_core_web_sm")
 
 TKNZ = TweetTokenizer()
 LEM = WordNetLemmatizer()
@@ -187,3 +187,5 @@ def filter_tweets_remove(tweets, param):
 
     return matches
 
+def convert_human_readable_list(lst):
+    return ", ".join(lst) 

@@ -9,8 +9,8 @@ def filter_presenter_tweets(data, award):
             award_keywords.append(word)
 #     print(award_keywords)
     present_words = ["present", "presented", "presents", "presentor", "presentors"]
-    for tweet in gg_data: 
-        tweet_text = tweet['text']
+    for tweet in data: 
+        tweet_text = tweet
         if any(pres_keyword in tweet_text.lower() for pres_keyword in present_words):
 #             count = 0 
 #             for k in award_keywords:

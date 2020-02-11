@@ -160,30 +160,70 @@ def main():
     pre_ceremony()
     year = int(input("Please enter year of Golden Globes Dataset:\n"))
 
-    # print("Getting Host(s) for", year, "Golden Globes")
-    # hosts = get_hosts(year)
-    # pprint(hosts)
+    print("Getting Host(s) for", year, "Golden Globes")
+    hosts = get_hosts(year)
+    pprint(hosts)
 
-    # print("Getting Award Names")
-    # awards = get_awards(year)
-    # pprint(awards)
+    print("Getting Award Names")
+    awards = get_awards(year)
+    pprint(awards)
     
     print("Getting Nominees Names")
     nominees = get_nominees(year)
     pprint(nominees)
 
-    # print("Getting Winners Names")
-    # winners = get_winner(year)
-    # pprint(winners)
+    print("Getting Winners Names")
+    winners = get_winner(year)
+    pprint(winners)
     
-    # print("Getting Presenters Names")
-    # presenters = get_presenters(year)
-    # pprint(presenters)
+    print("Getting Presenters Names")
+    presenters = get_presenters(year)
+    pprint(presenters)
 
-    # print("Getting Redcarpet")
-    # redcarpet = get_redcarpet(year)
-    # pprint(redcarpet)
-   
+    print("Getting Redcarpet")
+    max_best_dressed, best_runner_up, max_worst_dressed, worst_runner_up, max_discussed, max_controversy = get_redcarpet(year)
+    pprint(redcarpet)
+
+    # output human readable format
+    readable_OFFICIAL_AWARDS_1315 = ['Cecil B. Demille Award', 'Best Motion Picture - Drama', 'Best Performance By An Actress In A Motion Picture - Drama', 'Best Performance By An Actor In A Motion Picture - Drama', 'Best Motion Picture - Comedy Or Musical', 'Best Performance By An Actress In A Motion Picture - Comedy Or Musical', 'Best Performance By An Actor In A Motion Picture - Comedy Or Musical', 'Best Animated Feature Film', 'Best Foreign Language Film', 'Best Performance By An Actress In A Supporting Role In A Motion Picture', 'Best Performance By An Actor In A Supporting Role In A Motion Picture', 'Best Director - Motion Picture', 'Best Screenplay - Motion Picture', 'Best Original Score - Motion Picture', 'Best Original Song - Motion Picture', 'Best Television Series - Drama', 'Best Performance By An Actress In A Television Series - Drama', 'Best Performance By An Actor In A Television Series - Drama', 'Best Television Series - Comedy Or Musical', 'Best Performance By An Actress In A Television Series - Comedy Or Musical', 'Best Performance By An Actor In A Television Series - Comedy Or Musical', 'Best Mini-series Or Motion Picture Made For Television', 'Best Performance By An Actress In A Mini-series Or Motion Picture Made For Television', 'Best Performance By An Actor In A Mini-series Or Motion Picture Made For Television', 'Best Performance By An Actress In A Supporting Role In A Series, Mini-series Or Motion Picture Made For Television', 'Best Performance By An Actor In A Supporting Role In A Series, Mini-series Or Motion Picture Made For Television']
+    readable_OFFICIAL_AWARDS_1819 = ['Best Motion Picture - Drama', 'Best Motion Picture - Musical Or Comedy', 'Best Performance By An Actress In A Motion Picture - Drama', 'Best Performance By An Actor In A Motion Picture - Drama', 'Best Performance By An Actress In A Motion Picture - Musical Or Comedy', 'Best Performance By An Actor In A Motion Picture - Musical Or Comedy', 'Best Performance By An Actress In A Supporting Role In Any Motion Picture', 'Best Performance By An Actor In A Supporting Role In Any Motion Picture', 'Best Director - Motion Picture', 'Best Screenplay - Motion Picture', 'Best Motion Picture - Animated', 'Best Motion Picture - Foreign Language', 'Best Original Score - Motion Picture', 'Best Original Song - Motion Picture', 'Best Television Series - Drama', 'Best Television Series - Musical Or Comedy', 'Best Television Limited Series Or Motion Picture Made For Television', 'Best Performance By An Actress In A Limited Series Or A Motion Picture Made For Television', 'Best Performance By An Actor In A Limited Series Or A Motion Picture Made For Television', 'Best Performance By An Actress In A Television Series - Drama', 'Best Performance By An Actor In A Television Series - Drama', 'Best Performance By An Actress In A Television Series - Musical Or Comedy', 'Best Performance By An Actor In A Television Series - Musical Or Comedy', 'Best Performance By An Actress In A Supporting Role In A Series, Limited Series Or Motion Picture Made For Television', 'Best Performance By An Actor In A Supporting Role In A Series, Limited Series Or Motion Picture Made For Television', 'Cecil B. Demille Award']
+
+    awards = readable_OFFICIAL_AWARDS_1819
+    if year in [2013, 2015]:
+        awards = readable_OFFICIAL_AWARDS_1315
+    
+    pprint("Golden Globes", year, "Award Results:")
+    pprint("Host(s):", convert_human_readable_list(hosts))
+    pprint("\n")
+    for award in awards:
+        key = award.lower()
+        pprint("Award:", award)
+        pprint("Presenters:", convert_human_readable_list(presenters[key]))
+        pprint("Nominees:", convert_human_readable_list(nominees[key]))
+        pprint("Winner:", convert_human_readable_list(winners[key]))
+        pprint("\n")
+
+    pprint("Our Parsed Awards:", convert_human_readable_list(awards))
+
+    pprint("Red Carpet")
+    pprint("Best Dressed:", max_best_dressed)
+    pprint("Best Dressed Runner Up:", best_runner_up)
+    pprint("Worst Dressed:", max_worst_dressed)
+    pprint("Worst Dressed Runner Up:", worst_runner_up)
+    pprint("Most Discussed:", max_discussed)
+    pprint("Most Controversial:", max_controversy)
+
+    # output autograder JSON format
+    autograder_json = {}
+    autograder_json["Host"] = hosts
+    for award in awards: 
+        key = award.lower()
+        award_category = {}
+        award_category["Presenters"] = presenters[key]
+        award_category["Nominees"] = nominees[key]
+        award_category["Winner"] = winner[key]
+        autograder_json[award] = award_category
+    return autograder_json
 
     fin = input("Press enter to exit")
     return
