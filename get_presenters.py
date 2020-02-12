@@ -1,4 +1,5 @@
 import spacy
+import operator
 nlp = spacy.load("en_core_web_sm")
 
 
@@ -15,7 +16,8 @@ def filter_presenter_tweets(data, award):
     present_words = ["present", "presented", "presents", "presentor", "presentors"]
     for tweet in data: 
         tweet_text = tweet
-        if any(pres_keyword in tweet_text.lower() for pres_keyword in present_words):
+        if any(pres_keyword in tweet_text.lower() for pres_keyword in present_words) and any(a in tweet_text.lower() for a in award_keywords):
+            # print(tweet_text)
             tweets_with_presenters.append(tweet_text)
     return tweets_with_presenters
 
@@ -30,6 +32,7 @@ def get_name_with_type(text, entity_type):
         parts_of_speech = dict([(str(x), x.label_) for x in nlp(text).ents])
         names = []
         for (key, value) in parts_of_speech.items() :
+            # print(key, value)
             if(value == entity_type) :
                 names.append(key)
         return names 
@@ -38,8 +41,8 @@ def _get_presenters(data, awards):
     '''Hosts is a list of one or more strings. Do NOT change the name
     of this function or what it returns.'''
     # declare dictionary for winners (award: winner)
-    presenters = {key: "" for key in awards} 
-    
+    # presenters = {key: "" for key in awards} 
+    presenters = {}
     for award in awards:
     # Get tweets with keyword award 
         tweets_with_award = filter_presenter_tweets(data, award)
@@ -57,13 +60,8 @@ def _get_presenters(data, awards):
                     presenter_name_count[name] = 1
         two_presenters = [] 
         for i in range(2): 
-            try:
-                top_presenter = max(presenter_name_count.items(), key=operator.itemgetter(1))[0]
-                two_presenters.append(top_presenter)
-                del top_presenter[top_nominee]
-            except: 
-                two_presenters.append("")
+            top_presenter = max(presenter_name_count.items(), key=operator.itemgetter(1))[0]
+            two_presenters.append(top_presenter)
+            del presenter_name_count[top_presenter]
         presenters[award] = two_presenters
     return presenters 
-
-    

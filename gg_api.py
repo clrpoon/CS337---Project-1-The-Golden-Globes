@@ -3,6 +3,9 @@
 import time
 import nltk
 from pprint import pprint
+import os.path
+import json
+from os import path
 
 # local file imports
 from util import *
@@ -26,28 +29,39 @@ def get_hosts(year):
     '''Hosts is a list of one or more strings. Do NOT change the name
     of this function or what it returns.'''
     # Your code here
+    hosts = []
+
     global PATH_TO_DATASET
-    
-    print("Loading Golden Globes dataset from", year)
-    data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
-    print("Done loading dataset") 
 
     print("Retrieving Hosts")
-    hosts = _get_hosts(year, data)
+    filename = 'cache/'+str(year)+'results.json'
+    if path.exists(filename):
+        with open(filename, 'r', encoding='utf8') as f:
+            json_cache = json.load(f)
+            hosts = json_cache['hosts']
+    else:
+        data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
+        hosts = _get_hosts(year, data)
     return hosts
 
 def get_awards(year):
     '''Awards is a list of strings. Do NOT change the name
     of this function or what it returns.'''
     # Your code here
+    awards = []
+
     global PATH_TO_DATASET
     
-    print("Loading Golden Globes dataset from", year)
     data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
-    print("Done loading dataset") 
 
     print("Retrieving Awards...")
-    awards = _get_awards(data)
+    filename = 'cache/'+str(year)+'results.json'
+    if path.exists(filename):
+        with open(filename, 'r', encoding='utf8') as f:
+            json_cache = json.load(f)
+            awards = json_cache['awards']
+    else:
+        awards = _get_awards(data)
 
     return awards
 
@@ -56,21 +70,29 @@ def get_nominees(year):
     names as keys, and each entry a list of strings. Do NOT change
     the name of this function or what it returns.'''
     # Your code here
-    global PATH_TO_DATASET
-
-    global OFFICIAL_AWARDS_1315
-    global OFFICIAL_AWARDS_1819
-    awards = OFFICIAL_AWARDS_1819
-
-    if year in [2013, 2015]:
-        awards = OFFICIAL_AWARDS_1315
-
-    print("Loading Golden Globes dataset from", year)
-    data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
-    print("Done loading dataset") 
-
+    nominees = {}
     print("Retrieving Nominees...")
-    nominees = _get_nominees(data, awards)
+    filename = 'cache/'+str(year)+'results.json'
+    if path.exists(filename):
+        with open(filename, 'r', encoding='utf8') as f:
+            json_cache = json.load(f)
+            nominees = json_cache['nominees']
+    else:
+        global PATH_TO_DATASET
+
+        global OFFICIAL_AWARDS_1315
+        global OFFICIAL_AWARDS_1819
+        awards = OFFICIAL_AWARDS_1819
+
+        if year in [2013, 2015]:
+            awards = OFFICIAL_AWARDS_1315
+
+        # print("Loading Golden Globes dataset from", year)
+        data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
+        # print("Done loading dataset") 
+
+        
+        nominees = _get_nominees(data, awards)
     
     return nominees
 
@@ -79,21 +101,29 @@ def get_winner(year):
     names as keys, and each entry containing a single string.
     Do NOT change the name of this function or what it returns.'''
     # Your code here
-    global PATH_TO_DATASET
+    winners = {}
+    print("Retrieving Winners...")
+    filename = 'cache/'+str(year)+'results.json'
+    if path.exists(filename):
+        with open(filename, 'r', encoding='utf8') as f:
+            json_cache = json.load(f)
+            winners = json_cache['winners']
+    else:
+        global PATH_TO_DATASET
 
-    global OFFICIAL_AWARDS_1315
-    global OFFICIAL_AWARDS_1819
-    awards = OFFICIAL_AWARDS_1819
+        global OFFICIAL_AWARDS_1315
+        global OFFICIAL_AWARDS_1819
+        awards = OFFICIAL_AWARDS_1819
 
-    if year in [2013, 2015]:
-        awards = OFFICIAL_AWARDS_1315
+        if year in [2013, 2015]:
+            awards = OFFICIAL_AWARDS_1315
 
-    print("Loading Golden Globes dataset from", year)
-    data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
-    print("Done loading dataset") 
+        # print("Loading Golden Globes dataset from", year)
+        data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
+        # print("Done loading dataset") 
 
-    print("Retrieving Winners")
-    winners = _get_winner(data, awards)
+        
+        winners = _get_winner(data, awards)
 
     return winners
 
@@ -102,34 +132,46 @@ def get_presenters(year):
     names as keys, and each entry a list of strings. Do NOT change the
     name of this function or what it returns.'''
     # Your code here
-    global PATH_TO_DATASET
-
-    global OFFICIAL_AWARDS_1315
-    global OFFICIAL_AWARDS_1819
-    awards = OFFICIAL_AWARDS_1819
-    
-    print("Loading Golden Globes dataset from", year)
-    data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
-    print("Done loading dataset") 
-
-    if year in [2013, 2015]:
-        awards = OFFICIAL_AWARDS_1315
-    
+    presenters = {}
     print("Retrieving Presenters...")
-    presenters = _get_presenters(data, awards)
+    filename = 'cache/'+str(year)+'results.json'
+    if path.exists(filename):
+        with open(filename, 'r', encoding='utf8') as f:
+            json_cache = json.load(f)
+            presenters = json_cache['presenters']
+    else:
+        global PATH_TO_DATASET
+
+        global OFFICIAL_AWARDS_1315
+        global OFFICIAL_AWARDS_1819
+        awards = OFFICIAL_AWARDS_1819
+        
+        # print("Loading Golden Globes dataset from", year)
+        data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
+        # print("Done loading dataset") 
+
+        if year in [2013, 2015]:
+            awards = OFFICIAL_AWARDS_1315
+        
+        
+        presenters = _get_presenters(data, awards)
     return presenters
 
 def get_redcarpet(year):
-    global PATH_TO_DATASET
-    
-    print("Loading Golden Globes dataset from", year)
-    data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
-    print("Done loading dataset") 
+    redcarpet = []
+    filename = 'cache/'+str(year)+'results.json'
+    if path.exists(filename):
+        with open(filename, 'r', encoding='utf8') as f:
+            json_cache = json.load(f)
+            redcarpet = json_cache['redcarpet']
+    else:
+        global PATH_TO_DATASET
+        
+        # print("Loading Golden Globes dataset from", year)
+        data = get_tweets(year, PATH_TO_DATASET, ALL_TWEETS)
+        # print("Done loading dataset") 
 
-    if year in [2013, 2015]:
-        awards = OFFICIAL_AWARDS_1315
-
-    redcarpert = _get_redcarpet(data, year)
+        redcarpert = _get_redcarpet(data, year)
     
     return redcarpert
 
@@ -160,73 +202,109 @@ def main():
     pre_ceremony()
     year = int(input("Please enter year of Golden Globes Dataset:\n"))
 
-    # print("Getting Host(s) for", year, "Golden Globes")
-    # hosts = get_hosts(year)
-    # pprint(hosts)
-
-    # print("Getting Award Names")
-    # awards = get_awards(year)
-    # pprint(awards)
+    filename = 'cache/'+str(year)+'results.json'
     
-    # print("Getting Nominees Names")
-    # nominees = get_nominees(year)
-    # pprint(nominees)
+    if path.exists(filename):
+        with open(filename, 'r', encoding='utf8') as f:
+            json_cache = json.load(f)
+            
+            # primary goals
+            hosts = json_cache["hosts"]
+            awards = json_cache["awards"]
+            nominees = json_cache["nominees"]
+            winners = json_cache["winners"]
+            presenters = json_cache["presenters"]
+            # presenters = get_presenters(year)
+            # print(presenters)
 
-    # print("Getting Winners Names")
-    # winners = get_winner(year)
-    # pprint(winners)
-    
-    print("Getting Presenters Names")
-    presenters = get_presenters(year)
-    pprint(presenters)
+            redcarpet = json_cache["redcarpet"]
+            max_best_dressed = redcarpet[0]
+            best_runner_up = redcarpet[1]
+            max_worst_dressed = redcarpet[2]
+            worst_runner_up = redcarpet[3]
+            max_discussed = redcarpet[4]
+            max_controversy = redcarpet[5]
 
-    # print("Getting Redcarpet")
-    # max_best_dressed, best_runner_up, max_worst_dressed, worst_runner_up, max_discussed, max_controversy = get_redcarpet(year)
-    # pprint(redcarpet)
+    else:
+        json_cache = {}
 
+        print("Getting Host(s) for", year, "Golden Globes")
+        hosts = get_hosts(year)
+        json_cache["hosts"] = hosts
+        # pprint(hosts)
+
+        print("Getting Award Names")
+        awards = get_awards(year)
+        json_cache["awards"] = awards
+        # pprint(awards)
+        
+        print("Getting Nominees Names")
+        nominees = get_nominees(year)
+        json_cache["nominees"] = nominees
+        # pprint(nominees)
+
+        print("Getting Winners Names")
+        winners = get_winner(year)
+        json_cache["winners"] = winners
+        # pprint(winners)
+        
+        print("Getting Presenters Names")
+        presenters = get_presenters(year)
+        json_cache["presenters"] = presenters
+        # pprint(presenters)
+
+        print("Getting Redcarpet")
+        max_best_dressed, best_runner_up, max_worst_dressed, worst_runner_up, max_discussed, max_controversy = get_redcarpet(year)
+        redcarpet = [max_best_dressed, best_runner_up, max_worst_dressed, worst_runner_up, max_discussed, max_controversy]
+        json_cache["redcarpet"] = redcarpet
+
+        with open(filename, 'w') as fp:
+            json.dump(json_cache, fp)
+
+
+ 
     # output human readable format
     readable_OFFICIAL_AWARDS_1315 = ['Cecil B. Demille Award', 'Best Motion Picture - Drama', 'Best Performance By An Actress In A Motion Picture - Drama', 'Best Performance By An Actor In A Motion Picture - Drama', 'Best Motion Picture - Comedy Or Musical', 'Best Performance By An Actress In A Motion Picture - Comedy Or Musical', 'Best Performance By An Actor In A Motion Picture - Comedy Or Musical', 'Best Animated Feature Film', 'Best Foreign Language Film', 'Best Performance By An Actress In A Supporting Role In A Motion Picture', 'Best Performance By An Actor In A Supporting Role In A Motion Picture', 'Best Director - Motion Picture', 'Best Screenplay - Motion Picture', 'Best Original Score - Motion Picture', 'Best Original Song - Motion Picture', 'Best Television Series - Drama', 'Best Performance By An Actress In A Television Series - Drama', 'Best Performance By An Actor In A Television Series - Drama', 'Best Television Series - Comedy Or Musical', 'Best Performance By An Actress In A Television Series - Comedy Or Musical', 'Best Performance By An Actor In A Television Series - Comedy Or Musical', 'Best Mini-series Or Motion Picture Made For Television', 'Best Performance By An Actress In A Mini-series Or Motion Picture Made For Television', 'Best Performance By An Actor In A Mini-series Or Motion Picture Made For Television', 'Best Performance By An Actress In A Supporting Role In A Series, Mini-series Or Motion Picture Made For Television', 'Best Performance By An Actor In A Supporting Role In A Series, Mini-series Or Motion Picture Made For Television']
     readable_OFFICIAL_AWARDS_1819 = ['Best Motion Picture - Drama', 'Best Motion Picture - Musical Or Comedy', 'Best Performance By An Actress In A Motion Picture - Drama', 'Best Performance By An Actor In A Motion Picture - Drama', 'Best Performance By An Actress In A Motion Picture - Musical Or Comedy', 'Best Performance By An Actor In A Motion Picture - Musical Or Comedy', 'Best Performance By An Actress In A Supporting Role In Any Motion Picture', 'Best Performance By An Actor In A Supporting Role In Any Motion Picture', 'Best Director - Motion Picture', 'Best Screenplay - Motion Picture', 'Best Motion Picture - Animated', 'Best Motion Picture - Foreign Language', 'Best Original Score - Motion Picture', 'Best Original Song - Motion Picture', 'Best Television Series - Drama', 'Best Television Series - Musical Or Comedy', 'Best Television Limited Series Or Motion Picture Made For Television', 'Best Performance By An Actress In A Limited Series Or A Motion Picture Made For Television', 'Best Performance By An Actor In A Limited Series Or A Motion Picture Made For Television', 'Best Performance By An Actress In A Television Series - Drama', 'Best Performance By An Actor In A Television Series - Drama', 'Best Performance By An Actress In A Television Series - Musical Or Comedy', 'Best Performance By An Actor In A Television Series - Musical Or Comedy', 'Best Performance By An Actress In A Supporting Role In A Series, Limited Series Or Motion Picture Made For Television', 'Best Performance By An Actor In A Supporting Role In A Series, Limited Series Or Motion Picture Made For Television', 'Cecil B. Demille Award']
 
-    # awards = readable_OFFICIAL_AWARDS_1819
-    # if year in [2013, 2015]:
-    #     awards = readable_OFFICIAL_AWARDS_1315
+    official_awards = readable_OFFICIAL_AWARDS_1819
+    if year in [2013, 2015]:
+        official_awards = readable_OFFICIAL_AWARDS_1315
     
-    # pprint("Golden Globes", year, "Award Results:")
-    # pprint("Host(s):", convert_human_readable_list(hosts))
-    # pprint("\n")
-    # for award in awards:
-    #     key = award.lower()
-    #     pprint("Award:", award)
-    #     pprint("Presenters:", convert_human_readable_list(presenters[key]))
-    #     pprint("Nominees:", convert_human_readable_list(nominees[key]))
-    #     pprint("Winner:", convert_human_readable_list(winners[key]))
-    #     pprint("\n")
+    print("Golden Globes Award Results for", year)
+    print('\n')
+    print("Host(s):", convert_human_readable_list(hosts))
+    print('\n')
+    for award in official_awards:
+        key = award.lower()
+        print("Award:", award)
+        # print("Presenters:", convert_human_readable_list(presenters[key]))
+        print("Nominees:", convert_human_readable_list(nominees[key]))
+        print("Winner:", winners[key])
+        print('\n')
 
-    # pprint("Our Parsed Awards:", convert_human_readable_list(awards))
+    print("Our Parsed Awards:", convert_human_readable_list(awards))
 
-    # pprint("Red Carpet")
-    # pprint("Best Dressed:", max_best_dressed)
-    # pprint("Best Dressed Runner Up:", best_runner_up)
-    # pprint("Worst Dressed:", max_worst_dressed)
-    # pprint("Worst Dressed Runner Up:", worst_runner_up)
-    # pprint("Most Discussed:", max_discussed)
-    # pprint("Most Controversial:", max_controversy)
+    print("Red Carpet")
+    print("Best Dressed:", max_best_dressed)
+    print("Best Dressed Runner Up:", best_runner_up)
+    print("Worst Dressed:", max_worst_dressed)
+    print("Worst Dressed Runner Up:", worst_runner_up)
+    print("Most Discussed:", max_discussed)
+    print("Most Controversial:", max_controversy)
+    print('\n')
 
-    # # output autograder JSON format
-    # autograder_json = {}
-    # autograder_json["Host"] = hosts
-    # for award in awards: 
-    #     key = award.lower()
-    #     award_category = {}
-    #     award_category["Presenters"] = presenters[key]
-    #     award_category["Nominees"] = nominees[key]
-    #     award_category["Winner"] = winner[key]
-    #     autograder_json[award] = award_category
-    # return autograder_json
+    autograder_json = {}
+    autograder_json["Host"] = hosts
+    for award in official_awards: 
+        key = award.lower()
+        award_category = {}
+        award_category["Presenters"] = presenters[key]
+        award_category["Nominees"] = nominees[key]
+        award_category["Winner"] = winners[key]
+        autograder_json[award] = award_category
 
-    fin = input("Press enter to exit")
-    return
+    return autograder_json
 
 if __name__ == '__main__':
     main()

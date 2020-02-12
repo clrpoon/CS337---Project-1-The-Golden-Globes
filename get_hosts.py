@@ -31,10 +31,10 @@ def _get_hosts(year, data):
     # determine host(s)
     try:
         winner1 = max(host_name_count.items(), key=operator.itemgetter(1))[0]
+        del host_name_count[winner1]
     except: 
         winner1 = ""
     if year in double_host_years:
-        del host_name_count[winner1]
         try:
             winner2 = max(host_name_count.items(), key=operator.itemgetter(1))[0]
         except: 

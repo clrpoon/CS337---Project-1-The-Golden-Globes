@@ -85,7 +85,7 @@ def _get_nominees(tweet_list, award_list):
         award_nominees = set()
         for tweet in award_tweet_list:
             nom_set = find_nominees(tweet, award_nominees, award)
-        for nom in nom_set:
-            award_nominees.add(nom)
+            for nom in nom_set:
+                award_nominees.add(nom)
         nominees[award] = list(award_nominees)
     return nominees

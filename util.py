@@ -209,5 +209,3 @@ def filter_tweets_remove(tweets, param):
 
 def convert_human_readable_list(lst):
     return ", ".join(lst) 
-
-    
